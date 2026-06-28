@@ -22,10 +22,10 @@ jobs:
         dotnet-version: '8.0' 
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore practice2026/practice2026.sln
 
     - name: Build all projects
-      run: dotnet build --no-restore --configuration Release
+      run: dotnet build practice2026/practice2026.sln --no-restore --configuration Release
 
     - name: Run all tests
-      run: dotnet test --no-build --configuration Release --verbosity normal
+      run: dotnet test practice2026/practice2026.sln --no-build --configuration Release --verbosity normal
