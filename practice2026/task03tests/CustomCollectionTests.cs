@@ -2,7 +2,6 @@
 {
     using task03;
     using Xunit;
-
     public class IteratorTests
     {
         [Fact]
@@ -49,6 +48,34 @@
 
             var result = collection.FilterAndSort(x => x > 1, x => x).ToList();
             Assert.Equal(new[] { 2, 3 }, result);
+        }
+
+        [Fact]
+        public void Add_Null_ThrowsArgumentNullException()
+        {
+            var collection = new CustomCollection<string>();
+            Assert.Throws<ArgumentNullException>(() => collection.Add(null));
+        }
+
+        [Fact]
+        public void FilterAndSort_NullPredicate_ThrowsArgumentNullException()
+        {
+            var collection = new CustomCollection<int>();
+            Assert.Throws<ArgumentNullException>(() =>
+                collection.FilterAndSort(null, x => x).ToList());
+        }
+        [Fact]
+        public void FilterAndSort_NullKeySelector_ThrowsArgumentNullException()
+        {
+            var collection = new CustomCollection<int>();
+            Assert.Throws<ArgumentNullException>(() =>
+                collection.FilterAndSort(x => true, null).ToList());
+        }
+        [Fact]
+        public void GenerateSequence_NegativeCount_ThrowsArgumentOutOfRangeException()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                CustomCollection<int>.GenerateSequence(5, -1).ToList());
         }
     }
 }
