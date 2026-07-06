@@ -75,6 +75,6 @@ namespace task04tests
             Assert.Equal(50, cruiser.Y);
         }
     }
-
 }
+
 
