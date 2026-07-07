@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "task08tests", "task08tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "task09tests", "task09tests\task09tests.csproj", "{9DD6A3BA-A52B-451E-B47C-9FE05A3CE13C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetadataViewer", "MetadataViever\MetadataViewer.csproj", "{AF5684C2-ED60-47DB-80A8-CBF93704CC76}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetadataViewer", "MetadataViewer\MetadataViewer.csproj", "{C90EE9BE-749B-966B-6AEE-E5443951F567}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{9DD6A3BA-A52B-451E-B47C-9FE05A3CE13C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DD6A3BA-A52B-451E-B47C-9FE05A3CE13C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DD6A3BA-A52B-451E-B47C-9FE05A3CE13C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AF5684C2-ED60-47DB-80A8-CBF93704CC76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AF5684C2-ED60-47DB-80A8-CBF93704CC76}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AF5684C2-ED60-47DB-80A8-CBF93704CC76}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AF5684C2-ED60-47DB-80A8-CBF93704CC76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C90EE9BE-749B-966B-6AEE-E5443951F567}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C90EE9BE-749B-966B-6AEE-E5443951F567}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C90EE9BE-749B-966B-6AEE-E5443951F567}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C90EE9BE-749B-966B-6AEE-E5443951F567}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
