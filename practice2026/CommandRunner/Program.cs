@@ -30,7 +30,7 @@ namespace CommandRunner
 
                 foreach (var type in commandTypes)
                 {
-                    Console.WriteLine($"--- Выполнение {type.Name} ---");
+                    Console.WriteLine($" Выполнение {type.Name}");
                     ICommand command = null;
 
                     if (type.Name == "DirectorySizeCommand")

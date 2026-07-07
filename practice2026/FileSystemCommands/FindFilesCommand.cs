@@ -13,6 +13,7 @@ namespace FileSystemCommands
             _directoryPath = directoryPath ?? throw new ArgumentNullException(nameof(directoryPath));
             _searchPattern = searchPattern ?? throw new ArgumentNullException(nameof(searchPattern));
         }
+        [DisplayName("Поиск файлов в каталоге")]
         public void Execute()
         {
             if (!Directory.Exists(_directoryPath))
@@ -38,4 +39,5 @@ namespace FileSystemCommands
         }
     }
 }
+
 

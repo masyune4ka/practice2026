@@ -12,6 +12,7 @@ namespace FileSystemCommands
         {
             _directoryPath = directoryPath ?? throw new ArgumentNullException(nameof(directoryPath));
         }
+        [DisplayName("Вычисление размера каталога")]
         public void Execute()
         {
             if (!Directory.Exists(_directoryPath))
@@ -44,3 +45,4 @@ namespace FileSystemCommands
         }
     }
 }
+
