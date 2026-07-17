@@ -11,6 +11,8 @@ public static class DefiniteIntegral
         double segmentLength = (b - a) / threadsNumber;
         Thread[] threads = new Thread[threadsNumber];
 
+        Barrier barrier = new Barrier(threadsNumber);
+
         for (int i = 0; i < threadsNumber; i++)
         {
             double segmentStart = a + i * segmentLength;
@@ -19,7 +21,6 @@ public static class DefiniteIntegral
             threads[i] = new Thread(() =>
             {
                 double localResult = 0.0;
-
                 int stepsCount = (int)((segmentEnd - segmentStart) / step);
                 for (int j = 0; j < stepsCount; j++)
                 {
@@ -35,12 +36,13 @@ public static class DefiniteIntegral
                     currentResult = result;
                     newResult = currentResult + localResult;
                 } while (Interlocked.CompareExchange(ref result, newResult, currentResult) != currentResult);
+                barrier.SignalAndWait();
             });
             threads[i].Start();
         }
         for (int i = 0; i < threadsNumber; i++)
         {
-            threads[i].Join();
+           threads[i].Join();
         }
         return result;
     }
