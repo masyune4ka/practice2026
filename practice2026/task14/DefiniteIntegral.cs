@@ -46,4 +46,20 @@ public static class DefiniteIntegral
         }
         return result;
     }
+    public static double SolveSingleThread(double a, double b, Func<double, double> function, double step)
+    {
+        double result = 0.0;
+        int stepsCount = (int)((b - a) / step);
+
+        for (int i = 0; i < stepsCount; i++)
+        {
+            double x = a + i * step;
+            double nextX = x + step;
+            double trapezoid = (function(x) + function(nextX)) / 2.0 * step;
+            result += trapezoid;
+        }
+
+        return result;
+    }
 }
+
