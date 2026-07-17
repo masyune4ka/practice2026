@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
-
 namespace task17;
-
 public class ServerThread
 {
     private readonly BlockingCollection<ICommand> _queue = new();
@@ -12,7 +10,6 @@ public class ServerThread
     private bool _softStopRequested;
     private bool _hardStopRequested;
     private readonly object _lock = new();
-
     public ServerThread(IExceptionHandler exceptionHandler = null)
     {
         _exceptionHandler = exceptionHandler;
@@ -20,7 +17,6 @@ public class ServerThread
         _thread.Start();
     }
     public Thread GetThread() => _thread;
-
     public void AddCommand(ICommand command)
     {
         lock (_lock)
@@ -42,7 +38,6 @@ public class ServerThread
             Monitor.Pulse(_lock);
         }
     }
-
     public void SoftStop()
     {
         lock (_lock)
