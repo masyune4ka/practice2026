@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using task17;
 using Xunit;
@@ -56,16 +57,28 @@ public class ThreadPoolTests
     public void ThreadPool_SchedulerRoundRobin()
     {
         var pool = new task18.ThreadPool();
-        int executionOrder = 0;
-        int task1Step = 0;
-        int task2Step = 0;
+        var steps = new List<int>();
+        var lockObj = new object();
+
         pool.Start(1);
-        pool.EnqueueTask(new TestCommand(() => task1Step = ++executionOrder, () => task1Step == 2));
-        pool.EnqueueTask(new TestCommand(() => task2Step = ++executionOrder, () => task2Step == 2));
-        Thread.Sleep(300);
+
+        var task1 = new TestCommand(
+            () => { lock (lockObj) steps.Add(1); },
+            () => { lock (lockObj) return steps.FindAll(x => x == 1).Count == 2; });
+
+        var task2 = new TestCommand(
+            () => { lock (lockObj) steps.Add(2); },
+            () => { lock (lockObj) return steps.FindAll(x => x == 2).Count == 2; });
+
+        pool.EnqueueTask(task1);
+        pool.EnqueueTask(task2);
+
+        Thread.Sleep(500);
         pool.Stop();
-        Assert.Equal(2, task1Step);
-        Assert.Equal(2, task2Step);
+
+        Assert.Equal(4, steps.Count);
+        Assert.Equal(2, steps.FindAll(x => x == 1).Count);
+        Assert.Equal(2, steps.FindAll(x => x == 2).Count);
     }
     private class TestCommand : ICommand
     {

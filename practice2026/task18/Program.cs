@@ -8,7 +8,6 @@ using System.Threading;
 using task17;
 
 namespace task18;
-
 class Program
 {
     static void Main()
@@ -34,21 +33,22 @@ class Program
         Console.WriteLine("Нажмите любую клавишу...");
         Console.ReadKey();
     }
-
     static double MeasureTime(int threads, int taskCount)
     {
         var pool = new ThreadPool();
         pool.Start(threads);
+
+        Stopwatch sw = Stopwatch.StartNew();
+
         for (int i = 0; i < taskCount; i++)
         {
             pool.EnqueueTask(new LongRunningTask(3));
         }
-        Stopwatch sw = Stopwatch.StartNew();
         pool.Stop();
         sw.Stop();
+
         return sw.Elapsed.TotalMilliseconds;
     }
-
     static void SaveReport(int[] threads, List<double> times, int taskCount)
     {
         using (StreamWriter writer = new StreamWriter("report.txt"))
@@ -62,7 +62,6 @@ class Program
             }
         }
     }
-
     static void GenerateGraph(int[] threads, List<double> times)
     {
         Plot plot = new();
@@ -73,7 +72,6 @@ class Program
         plot.SavePng("graph.png", 800, 600);
     }
 }
-
 public class LongRunningTask : ICommand
 {
     private readonly int _totalSteps;
@@ -85,8 +83,8 @@ public class LongRunningTask : ICommand
     }
     public bool Execute()
     {
-        _currentStep++;
+        int step = Interlocked.Increment(ref _currentStep);
         Thread.Sleep(10);
-        return _currentStep >= _totalSteps;
+        return step >= _totalSteps;
     }
 }

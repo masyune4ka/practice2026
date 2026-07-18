@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using task17;
+
 namespace task18;
 public class ThreadPool
 {
@@ -45,6 +46,7 @@ public class ThreadPool
             _isStopped = true;
             Monitor.PulseAll(_lock);
         }
+
         if (_threads != null)
         {
             foreach (var thread in _threads)
@@ -66,15 +68,15 @@ public class ThreadPool
                 }
                 if (_isStopped && _queue.Count == 0 && _scheduler.Count == 0)
                 {
-                    break;
+                    return;
                 }
-                if (_queue.Count > 0)
-                {
-                    task = _queue.Dequeue();
-                }
-                else if (_scheduler.Count > 0)
+                if (_scheduler.Count > 0)
                 {
                     task = _scheduler.Dequeue();
+                }
+                else if (_queue.Count > 0)
+                {
+                    task = _queue.Dequeue();
                 }
             }
             if (task != null)
@@ -87,6 +89,7 @@ public class ThreadPool
                         lock (_lock)
                         {
                             _scheduler.Enqueue(task);
+                            Monitor.Pulse(_lock);
                         }
                     }
                 }
