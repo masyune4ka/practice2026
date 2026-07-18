@@ -11,7 +11,6 @@ public class ServerThread
     private Thread _thread;
     private bool _softStopRequested;
     private bool _hardStopRequested;
-    private readonly object _lock = new();
 
     public ServerThread(IExceptionHandler exceptionHandler = null)
     {
@@ -19,74 +18,48 @@ public class ServerThread
         _thread = new Thread(WorkLoop) { IsBackground = true };
         _thread.Start();
     }
+
     public Thread GetThread() => _thread;
 
     public void AddCommand(ICommand command)
     {
-        lock (_lock)
+        if (_softStopRequested || _hardStopRequested)
         {
-            if (_softStopRequested)
-            {
-                throw new InvalidOperationException("Поток в процессе SoftStop");
-            }
-            _queue.Add(command);
-            Monitor.Pulse(_lock);
+            throw new InvalidOperationException("Поток в процессе остановки");
         }
+        _queue.Add(command);
     }
+
     public void HardStop()
     {
-        lock (_lock)
-        {
-            _hardStopRequested = true;
-            _queue.CompleteAdding();
-            Monitor.Pulse(_lock);
-        }
+        _hardStopRequested = true;
+        while (_queue.TryTake(out _)) { }
+        _queue.CompleteAdding();
     }
 
     public void SoftStop()
     {
-        lock (_lock)
-        {
-            _softStopRequested = true;
-            Monitor.Pulse(_lock);
-        }
+        _softStopRequested = true;
+        _queue.CompleteAdding();
     }
+
     public void Join(TimeSpan timeout) => _thread.Join(timeout);
+
     private void WorkLoop()
     {
-        while (true)
+        foreach (var command in _queue.GetConsumingEnumerable())
         {
-            ICommand command = null;
-            lock (_lock)
+            try
             {
-                while (_queue.Count == 0 && !_queue.IsCompleted && !_softStopRequested)
-                {
-                    Monitor.Wait(_lock);
-                }
-                if (_queue.IsCompleted || _hardStopRequested)
-                {
-                    break;
-                }
-                if (_softStopRequested && _queue.Count == 0)
-                {
-                    break;
-                }
-                if (_queue.Count > 0)
-                {
-                    command = _queue.Take();
-                }
+                command.Execute();
             }
-            if (command != null)
+            catch (Exception ex)
             {
-                try
-                {
-                    command.Execute();
-                }
-                catch (Exception ex)
-                {
-                    _exceptionHandler?.Handle(command, ex);
-                }
+                _exceptionHandler?.Handle(command, ex);
             }
+
+            if (_softStopRequested && _queue.Count == 0)
+                break;
         }
     }
 }
