@@ -17,11 +17,11 @@ public class TestCommand : ICommand
         _maxCalls = maxCalls;
         _counter = 0;
     }
-
     public void Execute()
     {
         _counter++;
-        Console.WriteLine($"Поток {_id} вызов {_counter}");
+        Console.WriteLine($"Команда {_id}: вызов {_counter} из {_maxCalls}");
+        Thread.Sleep(10);
 
         if (_counter < _maxCalls)
         {
